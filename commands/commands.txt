@@ -1,0 +1,3 @@
+client-post /index.html localhost 5000
+client-post /index.txt localhost 5000
+client-post /index.png localhost 5000
