@@ -85,7 +85,7 @@ int main(int argc, char const *argv[]){
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0)
     {
-        printf("\n Socket creation error \n");
+        cout<<"Error in Socket creation\n";
         return -1;
     }
 
@@ -96,13 +96,13 @@ int main(int argc, char const *argv[]){
     int rtnVal = inet_pton(AF_INET, servIP, &servAddr.sin_addr.s_addr);
     if(rtnVal <= 0 )
     {
-        printf("\nInvalid address/ Address not supported \n");
+        cout <<"Invalid address/ Address not supported \n";
         return -1;
     }
 
     if (connect(sock, (struct sockaddr *)&servAddr, sizeof(servAddr)) < 0)
     {
-        printf("\nConnection Failed \n");
+        cout <<"Connection Failed \n";
         return -1;
     }
 
@@ -164,14 +164,14 @@ void send_get(int sock, string command){
         cout<<"failed in send\n";
         return;
     }
-    cout << "=========== Request Sent =========== "<<sendBytes<<"\n" << request << "\n";
+    cout << ">>>>>>>>>>>>> Request Sent "<<sendBytes<<" Bytes \n" << request << "\n";
     char buff[MAXDATABUF] = {0};
     int recBytes = recv(sock, buff, MAXDATABUF,0);
     if(recBytes == 0){
         cout<<"failed in rec\n";
         return;
     }
-    cout << "=========== Response Received ===========\n" << string(buff,recBytes) << "\n";
+    cout << ">>>>>>>>>>>>> Response Received " <<recBytes<<" Bytes\n"<< string(buff,recBytes) << "\n";
     string  buffstr = string(buff,recBytes);
     if(buffstr.substr(9, 3) == "200"){
         file_path = mypath + splitwithdel(file_path, '/').back();
@@ -179,8 +179,6 @@ void send_get(int sock, string command){
         string data =  getdata(buffstr, "\r\n\r\n");
         file << data.substr(0,data.size()-1);
         file.close();
-        cout << "\n=== File Saved in " << file_path << " ===\n";
-
     }
 }
 
@@ -220,11 +218,11 @@ void send_post(int sock, string command){
         request += "\r\n\r\n" + datafile;
         file.close();
         int sendBytes = send(sock, &request[0], request.size(), 0);
-        cout << "=========== Request Sent ==========="<<sendBytes<<"\n" << request << "\n";
+        cout << ">>>>>>>>>>>>> Request Sent "<<sendBytes<<" Bytes\n" << request << "\n";
         char buffer[MAXDATABUF] = {0};
         int recBytes = recv(sock, buffer, MAXDATABUF, 0);
         if(recBytes > 0 )
-            cout << "=========== Response Received ===========\n" << string(buffer,recBytes) << "\n";
+            cout << "=========== Response Received "<<recBytes<<" Bytes\n"<< string(buffer,recBytes) << "\n";
     }else{
         cout<<"Invalid post\n";
     }
